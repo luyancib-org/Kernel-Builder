@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "MIUI",
       "repo": "https://github.com/luyanci/android_kernel_xiaomi_sm6150_miui",
-      "branch": "sukisu-testing-hook",
+      "branch": "sukisu-ngki-newhook",
       "device": "phoenix_ztc1997"
     },
     "isConfiginvendor":true,
