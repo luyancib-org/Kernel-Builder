@@ -292,6 +292,12 @@ jobs:
           echo -e "\n# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
           patch -p1 < ./utils/fix_cgroup.patch
 
+      - name: "😋 Setup KernelSU"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        run: |
+          wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash
+          echo -e "\nCONFIG_SECURITY_BASEBAND_GUARD=y" >> ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
+
       - name: "👍 Make defconfig"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         env:
