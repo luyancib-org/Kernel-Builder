@@ -30,6 +30,14 @@ on:
             required: true
             type: boolean
             default: false
+        with_bbg:
+            required: true
+            type: boolean
+            default: true
+        with_simple_lmk:
+            required: true
+            type: boolean
+            default: false
 jobs:
   Set-repos:
     name: "🐂 Parse repos.json"
@@ -291,6 +299,22 @@ jobs:
           sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
           echo -e "\n# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
           patch -p1 < ./utils/fix_cgroup.patch
+
+
+      - name: "😋 Setup BaseBand-Guard"
+        if: ${{ github.event.inputs.with_bbg == 'true' }}
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        run: |
+          wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash -s fixm
+          echo -e "\nCONFIG_BBG=y" >> ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
+
+
+      - name: "😋 Setup Simple-lmk"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        run: |
+          wget -Oadd-simple-lmk.patch https://github.com/kerneltoast/simple_lmk/compare/2d0aaa2e697e3787d96c7587197f5570f5e8fdd2^...linux-4.14.patch
+          patch -p1 < add-simple-lmk.patch
+          echo -e "\nCONFIG_ANDROID_SMIPLE_LMK=y" >> ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
 
       - name: "👍 Make defconfig"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
