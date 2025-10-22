@@ -305,7 +305,7 @@ jobs:
         if: ${{ github.event.inputs.with_bbg == 'true' }}
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         run: |
-          wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash -s fixm
+          wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash -s main
           echo -e "\nCONFIG_BBG=y" >> ./arch/${{ env.ARCH }}/configs/vendor/${{ env.DEFCONFIG_NAME }}
 
 
